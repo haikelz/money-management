@@ -1,0 +1,47 @@
+
+> money-management@1.0.0 build /run/media/haikel/1f7b5dc8-2a53-4740-b7bb-b0fbc05dfb45/Projects/money-management
+> next build
+
+   ▲ Next.js 14.0.4
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ (pwa) Compiling for server...
+ ✓ (pwa) Compiling for server...
+ ✓ (pwa) Compiling for client (static)...
+ ○ (pwa) Service worker: /run/media/haikel/1f7b5dc8-2a53-4740-b7bb-b0fbc05dfb45/Projects/money-management/public/sw.js
+ ○ (pwa)   URL: /sw.js
+ ○ (pwa)   Scope: /
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/11) ...
+   Generating static pages (2/11) 
+   Generating static pages (5/11) 
+   Generating static pages (8/11) 
+ ✓ Generating static pages (11/11) 
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ λ /                                    1.72 kB         194 kB
+├ ○ /_not-found                          874 B          84.8 kB
+├ λ /add                                 5.78 kB         206 kB
+├ λ /api/auth/[...nextauth]              0 B                0 B
+├ λ /auth/sign-in                        2.15 kB         129 kB
+├ λ /auth/sign-up                        148 B          84.1 kB
+├ ● /edit/[id]                           2.22 kB         202 kB
+├   ├ /edit/B0RmQMqvpeN0qyXA3q1y
+├   └ /edit/WGH5BATBBowDeJDAjv1M
+└ λ /profile                             1.42 kB         115 kB
++ First Load JS shared by all            83.9 kB
+  ├ chunks/653-db7191eccf95664b.js       28.7 kB
+  ├ chunks/9bb1fbd7-4ee3c67b4353e43b.js  53.3 kB
+  ├ chunks/main-app-9b7abf27d8c28285.js  224 B
+  └ chunks/webpack-77d83cc789cec9e1.js   1.74 kB
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses getStaticProps)
+λ  (Dynamic)  server-rendered on demand using Node.js
+
