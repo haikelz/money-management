@@ -53,6 +53,7 @@ export default async function Page() {
             width={300}
             height={300}
             alt="money management login"
+            className="dark:text-zinc-50"
           />
           <h1 className="text-3xl font-extrabold">Money Management</h1>
         </div>

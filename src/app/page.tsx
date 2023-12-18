@@ -1,10 +1,4 @@
-import {
-  DocumentData,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { DocumentData, collection, getDocs } from "firebase/firestore";
 import { PencilIcon } from "lucide-react";
 import { Metadata } from "next";
 import { Session } from "next-auth";
@@ -12,11 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Section from "~components/section";
-import { tw } from "~lib/helpers";
+import { toRupiah, tw } from "~lib/helpers";
 import { DEFAULT_OG_URL, SITE_URL } from "~lib/utils/constants";
 import { db } from "~lib/utils/firebase";
 import { serverSession } from "~lib/utils/server-session";
-import { toRupiah } from "~lib/utils/to-rupiah";
 import { DataFromFireStoreProps } from "~types";
 
 import { DeleteButton } from "./client";
@@ -98,7 +91,8 @@ export default async function Page() {
         <div className="mt-4">
           <div
             className={tw(
-              "bg-blue-200 dark:bg-zinc-800 flex justify-center items-center",
+              "bg-blue-200 dark:bg-zinc-800 flex flex-col",
+              "flex-row justify-center items-center",
               "border-brutalism p-6 rounded-lg"
             )}
           >
@@ -120,7 +114,12 @@ export default async function Page() {
             </div>
           </div>
           <div className="flex mt-2.5 w-full space-x-2.5">
-            <div className="border-brutalism w-full rounded-lg p-3 h-full bg-red-200 dark:bg-zinc-800">
+            <div
+              className={tw(
+                "border-brutalism w-full rounded-lg p-3",
+                "h-full bg-red-200 dark:bg-zinc-800"
+              )}
+            >
               <Image
                 src="/images/money-flower.svg"
                 alt="income"
@@ -134,7 +133,12 @@ export default async function Page() {
                 </p>
               </div>
             </div>
-            <div className="border-brutalism w-full rounded-lg p-3 h-full bg-yellow-200 dark:bg-zinc-800">
+            <div
+              className={tw(
+                "border-brutalism w-full rounded-lg p-3",
+                "h-full bg-yellow-200 dark:bg-zinc-800"
+              )}
+            >
               <Image
                 src="/images/money-expense.svg"
                 alt="expense"

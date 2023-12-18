@@ -5,12 +5,11 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import Section from "~components/section";
-import { tw } from "~lib/helpers";
+import { toRupiah, tw } from "~lib/helpers";
 import { DEFAULT_OG_URL, SITE_URL } from "~lib/utils/constants";
 import { db } from "~lib/utils/firebase";
 import { randomAvatar } from "~lib/utils/random-avatar";
 import { serverSession } from "~lib/utils/server-session";
-import { toRupiah } from "~lib/utils/to-rupiah";
 import { DataFromFireStoreProps } from "~types";
 
 import { SignOutButton } from "./client";
@@ -55,6 +54,17 @@ const SwitchTheme = dynamic(() => import("~components/switch-theme"), {
   ),
 });
 
+async function getDataFromFireStore(): Promise<
+  DataFromFireStoreProps | undefined
+> {
+  try {
+    const response = await getDocs(collection(db, "data"));
+    return response;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 const optionsList: Array<{ id: number; name: string; image: string }> = [
   {
     id: 1,
@@ -72,17 +82,6 @@ const optionsList: Array<{ id: number; name: string; image: string }> = [
     image: "/images/history.svg",
   },
 ];
-
-async function getDataFromFireStore(): Promise<
-  DataFromFireStoreProps | undefined
-> {
-  try {
-    const response = await getDocs(collection(db, "data"));
-    return response;
-  } catch (err) {
-    console.error(err);
-  }
-}
 
 export default async function Page() {
   const session = (await serverSession()) as Session;
@@ -153,9 +152,7 @@ export default async function Page() {
         {optionsList.map((item) => {
           if (item.name === "Switch Theme") {
             return (
-              <button
-                type="button"
-                aria-label="switch theme"
+              <div
                 className={tw(
                   "rounded-3xl flex w-full justify-between items-center",
                   "drop-shadow-md px-4 py-2 bg-zinc-50 dark:bg-zinc-800",
@@ -174,7 +171,7 @@ export default async function Page() {
                   <span className="font-medium text-base">{item.name}</span>
                 </div>
                 <SwitchTheme />
-              </button>
+              </div>
             );
           } else
             return (

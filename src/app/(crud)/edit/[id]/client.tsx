@@ -30,13 +30,20 @@ export default function Client(
 
   // update data
   async function onSubmit(): Promise<void> {
-    const reference = doc(db, "data", id);
+    try {
+      const reference = doc(db, "data", id);
 
-    await updateDoc(reference, {
-      type: type,
-      amount: Number(getValues("amount")),
-      description: getValues("description"),
-    });
+      await updateDoc(reference, {
+        type: type,
+        amount:
+          type === "Income"
+            ? Number(getValues("amount"))
+            : -Number(getValues("amount")),
+        description: getValues("description"),
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
@@ -49,7 +56,7 @@ export default function Client(
           <div
             className={tw(
               "border-brutalism flex justify-between items-center",
-              "bg-zinc-200 mt-1 rounded-lg font-semibold px-3 py-1"
+              "bg-zinc-200 dark:bg-zinc-800 mt-1 rounded-lg font-semibold px-3 py-1"
             )}
           >
             <span>{type}</span>

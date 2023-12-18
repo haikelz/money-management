@@ -13,7 +13,15 @@ import useGlobalStore from "~store";
 import { TypeProps } from "~types";
 
 export default function Client(
-  { email, username }: { email: string; username: string }
+  {
+    email,
+    username,
+    createdAt,
+  }: {
+    email: string;
+    username: string;
+    createdAt: string;
+  }
 ) {
   const { type, setType } = useGlobalStore((state) => ({
     type: state.type as TypeProps,
@@ -38,35 +46,44 @@ export default function Client(
   async function addDataToFireStore(
     email: string,
     username: string,
+    createdAt: string,
     type: TypeProps,
     amount: number,
     description: string
   ): Promise<void> {
     try {
-      await addDoc(collection(db, "data"), {
+      const response = await addDoc(collection(db, "data"), {
         email: email,
         username: username,
         type: type,
+        createdAt: createdAt,
         amount: amount,
         description: description,
       });
+
+      if (response) {
+        router.push("/");
+      }
     } catch (err) {
       console.error(err);
     }
   }
 
   async function onSubmit(): Promise<void> {
-    await addDataToFireStore(
-      email ?? null,
-      username ?? null,
-      type,
-      type === "Income"
-        ? Number(getValues("amount"))
-        : -Number(getValues("amount")),
-      getValues("description")
-    );
-
-    router.push("/");
+    try {
+      await addDataToFireStore(
+        email ?? null,
+        username ?? null,
+        createdAt ?? null,
+        type,
+        type === "Income"
+          ? Number(getValues("amount"))
+          : -Number(getValues("amount")),
+        getValues("description")
+      );
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (

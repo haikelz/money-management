@@ -37,12 +37,12 @@ export const options: NextAuthOptions = {
       name: "Credentials Login",
       credentials: {
         username: {
-          label: "username",
+          label: "Username",
           type: "username",
           placeholder: "Username....",
         },
         password: {
-          label: "password",
+          label: "Password",
           type: "password",
           placeholder: "Password....",
         },

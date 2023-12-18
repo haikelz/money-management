@@ -49,7 +49,11 @@ export default async function Page() {
     <Section>
       <div className="w-full">
         <h1 className="font-extrabold text-[28px]">Add New Income/Expense</h1>
-        <Client email={session.user.email} username={session.user.name} />
+        <Client
+          email={session.user.email}
+          username={session.user.name}
+          createdAt={session.user.created_at}
+        />
       </div>
     </Section>
   );
