@@ -1,18 +1,20 @@
 "use client";
 
-import { doc, updateDoc } from "firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, Label, TextArea } from "~components/ui";
 import { tw } from "~lib/helpers";
-import { db } from "~lib/utils/firebase";
+import { trpc } from "~lib/utils/trpc/client";
 import { FieldsProps } from "~types";
 
 export default function Client(
   { id, foundData }: { id: string; foundData: FieldsProps }
 ) {
   const { amount, description } = foundData;
+
+  const queryClient = useQueryClient();
 
   const [type, setType] = useState<"Income" | "Expense">(foundData.type);
 
@@ -28,22 +30,33 @@ export default function Client(
     },
   });
 
-  // update data
-  async function onSubmit(): Promise<void> {
-    try {
-      const reference = doc(db, "data", id);
+  const patchMutation = trpc.patch.useMutation({
+    mutationKey: ["patch-data"],
+    onSettled: async () => {
+      return await queryClient.invalidateQueries({
+        queryKey: ["patch-data"],
+        exact: true,
+      });
+    },
+  });
 
-      await updateDoc(reference, {
+  // update data
+  function onSubmit() {
+    patchMutation.mutate({
+      id: id,
+      data: {
         type: type,
         amount:
-          type === "Income"
+          type === "Expense" && getValues("amount").toString().includes("-")
+            ? Number(getValues("amount"))
+            : type === "Income" && getValues("amount").toString().includes("-")
+            ? -Number(getValues("amount"))
+            : type === "Income"
             ? Number(getValues("amount"))
             : -Number(getValues("amount")),
         description: getValues("description"),
-      });
-    } catch (err) {
-      console.error(err);
-    }
+      },
+    });
   }
 
   return (
@@ -86,7 +99,9 @@ export default function Client(
             required
             className="mt-1"
           />
-          {errors.amount ? <span>{errors.amount.message}</span> : null}
+          {errors.amount ? (
+            <span className="mt-0.5">{errors.amount.message}</span>
+          ) : null}
         </div>
         <div className="flex flex-col">
           <Label htmlFor="description" className="font-semibold text-sm">
@@ -100,7 +115,7 @@ export default function Client(
             className="mt-1 h-[124px]"
           />
           {errors.description ? (
-            <span>{errors.description.message}</span>
+            <span className="mt-0.5">{errors.description.message}</span>
           ) : null}
         </div>
       </div>

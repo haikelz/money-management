@@ -15,6 +15,9 @@ export type TypeSliceProps = {
 export type DataFromFireStoreProps = QuerySnapshot<DocumentData, DocumentData>;
 
 export type FieldsProps = {
+  createdAt: string;
+  email: string;
+  username: string;
   type: TypeProps;
   amount: number;
   description: string;

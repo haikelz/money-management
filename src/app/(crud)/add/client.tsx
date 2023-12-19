@@ -1,14 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addDoc, collection } from "firebase/firestore";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button, Input, Label, TextArea } from "~components/ui";
 import { tw } from "~lib/helpers";
-import { db } from "~lib/utils/firebase";
 import { addDataSchema } from "~lib/utils/schema";
+import { trpc } from "~lib/utils/trpc/client";
 import useGlobalStore from "~store";
 import { TypeProps } from "~types";
 
@@ -28,6 +28,7 @@ export default function Client(
     setType: state.setType,
   }));
 
+  const queryClient: QueryClient = useQueryClient();
   const router = useRouter();
 
   const {
@@ -43,47 +44,30 @@ export default function Client(
     resolver: zodResolver(addDataSchema),
   });
 
-  async function addDataToFireStore(
-    email: string,
-    username: string,
-    createdAt: string,
-    type: TypeProps,
-    amount: number,
-    description: string
-  ): Promise<void> {
-    try {
-      const response = await addDoc(collection(db, "data"), {
-        email: email,
-        username: username,
-        type: type,
-        createdAt: createdAt,
-        amount: amount,
-        description: description,
+  const postMutation = trpc.post.useMutation({
+    mutationKey: ["post-data"],
+    onSettled: async () => {
+      return await queryClient.invalidateQueries({
+        queryKey: ["post-data"],
+        exact: true,
       });
+    },
+  });
 
-      if (response) {
-        router.push("/");
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  async function onSubmit(): Promise<void> {
-    try {
-      await addDataToFireStore(
-        email ?? null,
-        username ?? null,
-        createdAt ?? null,
-        type,
+  function onSubmit() {
+    postMutation.mutate({
+      email: email ?? null,
+      username: username ?? null,
+      createdAt: createdAt ?? null,
+      type: type,
+      amount:
         type === "Income"
           ? Number(getValues("amount"))
           : -Number(getValues("amount")),
-        getValues("description")
-      );
-    } catch (err) {
-      console.error(err);
-    }
+      description: getValues("description"),
+    });
+
+    router.replace("/");
   }
 
   return (
