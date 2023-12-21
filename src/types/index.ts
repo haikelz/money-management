@@ -15,10 +15,15 @@ export type TypeSliceProps = {
 export type DataFromFireStoreProps = QuerySnapshot<DocumentData, DocumentData>;
 
 export type FieldsProps = {
-  createdAt: string;
+  created_at: string;
   email: string;
-  username: string;
+  name: string;
   type: TypeProps;
   amount: number;
   description: string;
+};
+
+export type ShowPasswordSliceProps = {
+  showPassword: boolean;
+  setShowPassword: (showPassword: boolean) => void;
 };

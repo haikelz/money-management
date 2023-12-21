@@ -51,8 +51,8 @@ export default async function Page() {
         <h1 className="font-extrabold text-[28px]">Add New Income/Expense</h1>
         <Client
           email={session.user.email}
-          username={session.user.name}
-          createdAt={session.user.created_at}
+          name={session.user.name}
+          created_at={session.user.created_at}
         />
       </div>
     </Section>

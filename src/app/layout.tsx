@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: ChildrenProps) {
   return (
     <html lang="en">
-      <body className={tw(archivo)}>
+      <body className={tw(archivo.className)}>
         <Wrapper>
           <main
             className={tw(

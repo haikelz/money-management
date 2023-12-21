@@ -7,7 +7,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "turbo": "next dev --turbo",
+    "open": "cypress open",
+    "test": "cypress run"
   },
   "dependencies": {
     "@dicebear/collection": "^7.0.1",
@@ -19,11 +22,11 @@
     "@trpc/client": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "date-fns": "^2.30.0",
     "firebase": "^10.7.1",
     "lucide-react": "^0.295.0",
-    "nanoid": "^5.0.4",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
@@ -44,6 +47,7 @@
     "@unocss/preset-wind": "^0.58.0",
     "@unocss/reset": "^0.58.0",
     "autoprefixer": "^10.4.16",
+    "cypress": "^13.6.1",
     "eslint": "^8.55.0",
     "eslint-config-next": "14.0.4",
     "eslint-config-prettier": "^9.1.0",

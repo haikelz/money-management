@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button, Input, Label, TextArea } from "~components/ui";
 import { tw } from "~lib/helpers";
@@ -15,12 +14,12 @@ import { TypeProps } from "~types";
 export default function Client(
   {
     email,
-    username,
-    createdAt,
+    name,
+    created_at,
   }: {
     email: string;
-    username: string;
-    createdAt: string;
+    name: string;
+    created_at: string;
   }
 ) {
   const { type, setType } = useGlobalStore((state) => ({
@@ -29,7 +28,6 @@ export default function Client(
   }));
 
   const queryClient: QueryClient = useQueryClient();
-  const router = useRouter();
 
   const {
     register,
@@ -44,21 +42,20 @@ export default function Client(
     resolver: zodResolver(addDataSchema),
   });
 
-  const postMutation = trpc.post.useMutation({
+  const { mutate } = trpc.post.useMutation({
     mutationKey: ["post-data"],
-    onSettled: async () => {
-      return await queryClient.invalidateQueries({
+    onSettled: async () =>
+      await queryClient.invalidateQueries({
         queryKey: ["post-data"],
-        exact: true,
-      });
-    },
+      }),
+    onSuccess: () => window.location.replace("/"),
   });
 
   function onSubmit() {
-    postMutation.mutate({
+    mutate({
       email: email ?? null,
-      username: username ?? null,
-      createdAt: createdAt ?? null,
+      name: name ?? null,
+      created_at: created_at ?? null,
       type: type,
       amount:
         type === "Income"
@@ -66,8 +63,6 @@ export default function Client(
           : -Number(getValues("amount")),
       description: getValues("description"),
     });
-
-    router.replace("/");
   }
 
   return (
@@ -90,7 +85,9 @@ export default function Client(
               onClick={() => setType(type === "Income" ? "Expense" : "Income")}
             >
               <Image
-                src="/images/triangle-option.svg"
+                src={`/images/${
+                  type === "Income" ? "increase.svg" : "decrease.svg"
+                }`}
                 alt="triangle"
                 width={21}
                 height={21}

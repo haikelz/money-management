@@ -4,14 +4,23 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "~lib/utils/firebase";
 import { DataFromFireStoreProps, FieldsProps } from "~types";
 
-export async function getData(): Promise<DataFromFireStoreProps | undefined> {
+export async function getData(
+  name: string,
+  email: string
+): Promise<DataFromFireStoreProps | undefined> {
   try {
-    const response = await getDocs(collection(db, "data"));
+    const reference = collection(db, "data");
+    let q = query(reference, where("email", "==", email));
+    q = query(reference, where("name", "==", name));
+
+    const response = await getDocs(q);
     return response;
   } catch (err) {
     console.error(err);
@@ -20,13 +29,13 @@ export async function getData(): Promise<DataFromFireStoreProps | undefined> {
 
 export async function postData(data: FieldsProps): Promise<void> {
   try {
-    const { type, username, email, createdAt, amount, description } = data;
+    const { type, name, email, created_at, amount, description } = data;
 
     await addDoc(collection(db, "data"), {
       email: email,
-      username: username,
+      name: name,
       type: type,
-      createdAt: createdAt,
+      created_at: created_at,
       amount: amount,
       description: description,
     });
@@ -46,7 +55,7 @@ export async function deleteData(id: string): Promise<void> {
 
 export async function patchData(
   id: string,
-  data: Omit<FieldsProps, "email" | "username" | "createdAt">
+  data: Omit<FieldsProps, "email" | "name" | "created_at">
 ): Promise<void> {
   try {
     const { type, amount, description } = data;

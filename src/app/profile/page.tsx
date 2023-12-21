@@ -1,18 +1,20 @@
-import { collection, getDocs } from "firebase/firestore";
 import { Metadata } from "next";
 import { Session } from "next-auth";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import Section from "~components/section";
+import { getData } from "~features/crud";
+import { getUserAccount } from "~features/new-account";
 import { toRupiah, tw } from "~lib/helpers";
 import { DEFAULT_OG_URL, SITE_URL } from "~lib/utils/constants";
-import { db } from "~lib/utils/firebase";
 import { randomAvatar } from "~lib/utils/random-avatar";
 import { serverSession } from "~lib/utils/server-session";
 import { DataFromFireStoreProps } from "~types";
 
-import { SignOutButton } from "./client";
+import { SignOutButton, UploadImage } from "./client";
+
+export const revalidate = 0;
 
 const baseMetadata = {
   title: "Profile",
@@ -54,17 +56,6 @@ const SwitchTheme = dynamic(() => import("~components/switch-theme"), {
   ),
 });
 
-async function getDataFromFireStore(): Promise<
-  DataFromFireStoreProps | undefined
-> {
-  try {
-    const response = await getDocs(collection(db, "data"));
-    return response;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
 const optionsList: Array<{ id: number; name: string; image: string }> = [
   {
     id: 1,
@@ -88,11 +79,22 @@ export default async function Page() {
 
   if (!session) return redirect("/auth/sign-in");
 
-  const data = (await getDataFromFireStore()) as DataFromFireStoreProps;
+  const data = (await getData(
+    session.user.name,
+    session.user.email
+  )) as DataFromFireStoreProps;
+
+  const userAccount = (await getUserAccount(
+    session.user.name,
+    "haikel"
+  )) as DataFromFireStoreProps;
 
   // total balance
   const balance = data.docs.map((item) => item.data().amount);
 
+  const id = userAccount.docs.map((item) => item.id);
+
+  console.log(id);
   return (
     <Section className="flex flex-col justify-between min-h-screen items-center">
       <div className="w-full">
@@ -111,9 +113,10 @@ export default async function Page() {
                 height={75}
                 className="rounded-full border-2 border-zinc-900 dark:border-zinc-50"
               />
+              <UploadImage id={id} />
               <div>
                 <h4 className="font-bold text-xl">{session.user.name}</h4>
-                <p className="font-medium text-sm">I&#39;m a based person!</p>
+                <p className="font-medium text-sm">{session.user.email}</p>
               </div>
             </div>
             <p className="font-semibold text-right text-sm">

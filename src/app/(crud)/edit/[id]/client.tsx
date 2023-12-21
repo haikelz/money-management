@@ -30,19 +30,18 @@ export default function Client(
     },
   });
 
-  const patchMutation = trpc.patch.useMutation({
+  const { mutate } = trpc.patch.useMutation({
     mutationKey: ["patch-data"],
-    onSettled: async () => {
-      return await queryClient.invalidateQueries({
+    onSettled: async () =>
+      await queryClient.invalidateQueries({
         queryKey: ["patch-data"],
-        exact: true,
-      });
-    },
+      }),
+    onSuccess: () => window.location.replace("/"),
   });
 
   // update data
   function onSubmit() {
-    patchMutation.mutate({
+    mutate({
       id: id,
       data: {
         type: type,
@@ -79,7 +78,9 @@ export default function Client(
               onClick={() => setType(type === "Income" ? "Expense" : "Income")}
             >
               <Image
-                src="/images/triangle-option.svg"
+                src={`/images/${
+                  type === "Income" ? "increase.svg" : "decrease.svg"
+                }`}
                 alt="triangle"
                 width={21}
                 height={21}

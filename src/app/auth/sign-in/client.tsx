@@ -1,15 +1,23 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { SignInResponse, signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Button, Input, Label } from "~components/ui";
 import { signInSchema } from "~lib/utils/schema";
+import useGlobalStore from "~store";
 
 export default function Client() {
   const router = useRouter();
+
+  const { showPassword, setShowPassword } = useGlobalStore((state) => ({
+    showPassword: state.showPassword,
+    setShowPassword: state.setShowPassword,
+  }));
 
   const {
     register,
@@ -18,21 +26,24 @@ export default function Client() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      username: "",
+      name: "",
       password: "",
     },
     resolver: zodResolver(signInSchema),
   });
 
   async function onSubmit(): Promise<void> {
-    const response = (await signIn("credentials", {
+    const auth = (await signIn("credentials", {
       redirect: false,
-      username: getValues("username"),
+      name: getValues("name"),
       password: getValues("password"),
     })) as SignInResponse;
 
-    if (response.error) {
-      console.log("Error!");
+    if (auth.error) {
+      console.log(auth.error);
+      toast(
+        "Error saat Sign In! Silahkan masukkan name atau passwod yang benar!"
+      );
     } else {
       return router.push("/");
     }
@@ -47,25 +58,43 @@ export default function Client() {
         <div className="my-8 space-y-3 w-full">
           <div className="flex flex-col">
             <Label
-              htmlFor="username or email"
+              htmlFor="name or email"
               className="font-semibold mb-1 text-sm"
             >
               Username
             </Label>
-            <Input required register={register} type="text" name="username" />
-            {errors.username ? <span>{errors.username.message}</span> : null}
+            <Input register={register} type="text" name="name" />
+            {errors.name ? (
+              <span className="mt-0.5">{errors.name.message}</span>
+            ) : null}
           </div>
           <div className="flex flex-col">
             <Label htmlFor="password" className="font-semibold mb-1 text-sm">
               Password
             </Label>
-            <Input
-              required
-              register={register}
-              type="password"
-              name="password"
-            />
-            {errors.password ? <span>{errors.password.message}</span> : null}
+            <div className="relative w-full flex items-center">
+              <Input
+                register={register}
+                type={showPassword ? "text" : "password"}
+                name="password"
+                className="relative w-full"
+              />
+              <button
+                type="button"
+                aria-label="show password"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4"
+              >
+                {showPassword ? (
+                  <EyeIcon size={20} />
+                ) : (
+                  <EyeOffIcon size={20} />
+                )}
+              </button>
+            </div>
+            {errors.password ? (
+              <span className="mt-0.5">{errors.password.message}</span>
+            ) : null}
           </div>
         </div>
         <Button type="submit" aria-label="sign in" className="w-[265px]">

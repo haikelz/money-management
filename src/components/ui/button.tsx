@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes } from "react";
 import { tw } from "~lib/helpers";
 
 const button = cva(
-  "font-bold text-lg rounded-lg border-t-2 border-r-4 border-b-4 border-zinc-900 px-6 py-1.5 border-l-2 text-zinc-900",
+  "font-bold text-lg rounded-lg border-t-2 border-r-4 border-b-4 border-zinc-900 px-6 py-1.5 border-l-2 text-zinc-900 dark:bg-zinc-800 dark:border-zinc-50 dark:text-zinc-50",
   {
     variants: {
       variant: {

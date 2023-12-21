@@ -1,19 +1,16 @@
 import format from "date-fns/format";
 import id from "date-fns/locale/id";
+import { DocumentData, QuerySnapshot } from "firebase/firestore";
 import { Awaitable, NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import { env } from "~env.mjs";
+import { getUserAccount } from "~features/new-account";
 
-const {
-  NEXT_PUBLIC_GITHUB_ID,
-  NEXT_PUBLIC_GITHUB_SECRET,
-  NEXTAUTH_SECRET,
-  CREDENTIAL_PASSWORD,
-  CREDENTIAL_USERNAME,
-} = env;
+const { NEXT_PUBLIC_GITHUB_ID, NEXT_PUBLIC_GITHUB_SECRET, NEXTAUTH_SECRET } =
+  env;
 
-const createdAt = format(new Date(), "cccc, dd MMMM yyyy, k:m:s", {
+const created_at = format(new Date(), "cccc, dd MMMM yyyy, k:m:s", {
   locale: id,
 });
 
@@ -36,9 +33,9 @@ export const options: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials Login",
       credentials: {
-        username: {
+        name: {
           label: "Username",
-          type: "username",
+          type: "name",
           placeholder: "Username....",
         },
         password: {
@@ -48,18 +45,22 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        const user = {
-          id: "12345678",
-          name: CREDENTIAL_USERNAME,
-          image: "",
-          password: CREDENTIAL_PASSWORD,
-          created_at: createdAt,
-        };
+        const creds = credentials as Record<"name" | "password", string>;
 
-        const creds = credentials as Record<"username" | "password", string>;
+        const response = (await getUserAccount(
+          creds.name,
+          creds.password
+        )) as QuerySnapshot<DocumentData, DocumentData>;
 
-        if (creds.username === user.name && creds.password === user.password) {
-          return user;
+        const userAccount: DocumentData = response.docs.map((item) =>
+          item.data()
+        )[0];
+
+        if (
+          creds.name === userAccount.name &&
+          creds.password === userAccount.password
+        ) {
+          return userAccount;
         } else {
           return null;
         }
@@ -82,6 +83,7 @@ export const options: NextAuthOptions = {
         session.user.name = token.name as string;
         session.user.login = token.login as string;
         session.user.created_at = token.created_at as string;
+        session.user.email = token.email as string;
       }
 
       return session;
