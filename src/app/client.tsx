@@ -2,6 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { TrashIcon } from "lucide-react";
+import toast from "react-hot-toast";
 import { trpc } from "~lib/utils/trpc/client";
 
 export function DeleteButton({ id }: { id: string }) {
@@ -16,6 +17,8 @@ export function DeleteButton({ id }: { id: string }) {
       });
     },
     onSuccess: () => window.location.reload(),
+    onError: () =>
+      toast("Terjadi masalah saat menghapus data! Silahkan coba lagi"),
   });
 
   function deleteField() {

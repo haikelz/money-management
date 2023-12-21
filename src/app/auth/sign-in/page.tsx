@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { DEFAULT_OG_URL, SITE_URL } from "~lib/utils/constants";
 import { serverSession } from "~lib/utils/server-session";
@@ -58,6 +59,14 @@ export default async function Page() {
           <h1 className="text-3xl font-extrabold">Money Management</h1>
         </div>
         <Client />
+        <div className="text-center mt-4">
+          <span>
+            Don&#39;t have an account?{" "}
+            <Link href="/auth/sign-up" className="font-bold">
+              Sign Up
+            </Link>
+          </span>
+        </div>
       </div>
     </section>
   );

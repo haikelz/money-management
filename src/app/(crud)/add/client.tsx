@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Button, Input, Label, TextArea } from "~components/ui";
 import { tw } from "~lib/helpers";
 import { addDataSchema } from "~lib/utils/schema";
@@ -48,7 +49,14 @@ export default function Client(
       await queryClient.invalidateQueries({
         queryKey: ["post-data"],
       }),
-    onSuccess: () => window.location.replace("/"),
+    onSuccess: () => {
+      toast("Sukses menambah data baru!");
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 1000);
+    },
+    onError: () =>
+      toast("Terjadi masalah saat menambah data baru! Silahkan coba lagi"),
   });
 
   function onSubmit() {

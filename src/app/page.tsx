@@ -72,8 +72,6 @@ export default async function Page() {
     .filter((item) => item.data().type === "Expense")
     .map((item) => item.data().amount);
 
-  console.log(session);
-
   return (
     <Section>
       <div className="w-full">

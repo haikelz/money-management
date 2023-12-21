@@ -5,14 +5,13 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import Section from "~components/section";
 import { getData } from "~features/crud";
-import { getUserAccount } from "~features/new-account";
 import { toRupiah, tw } from "~lib/helpers";
 import { DEFAULT_OG_URL, SITE_URL } from "~lib/utils/constants";
 import { randomAvatar } from "~lib/utils/random-avatar";
 import { serverSession } from "~lib/utils/server-session";
 import { DataFromFireStoreProps } from "~types";
 
-import { SignOutButton, UploadImage } from "./client";
+import { SignOutButton } from "./client";
 
 export const revalidate = 0;
 
@@ -84,17 +83,9 @@ export default async function Page() {
     session.user.email
   )) as DataFromFireStoreProps;
 
-  const userAccount = (await getUserAccount(
-    session.user.name,
-    "haikel"
-  )) as DataFromFireStoreProps;
-
   // total balance
   const balance = data.docs.map((item) => item.data().amount);
 
-  const id = userAccount.docs.map((item) => item.id);
-
-  console.log(id);
   return (
     <Section className="flex flex-col justify-between min-h-screen items-center">
       <div className="w-full">
@@ -113,7 +104,6 @@ export default async function Page() {
                 height={75}
                 className="rounded-full border-2 border-zinc-900 dark:border-zinc-50"
               />
-              <UploadImage id={id} />
               <div>
                 <h4 className="font-bold text-xl">{session.user.name}</h4>
                 <p className="font-medium text-sm">{session.user.email}</p>

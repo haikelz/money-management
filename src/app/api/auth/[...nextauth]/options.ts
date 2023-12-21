@@ -52,9 +52,12 @@ export const options: NextAuthOptions = {
           creds.password
         )) as QuerySnapshot<DocumentData, DocumentData>;
 
-        const userAccount: DocumentData = response.docs.map((item) =>
+        const userAccount = response.docs.map((item) =>
           item.data()
-        )[0];
+        )[0] as Record<
+          "created_at" | "email" | "image" | "name" | "password",
+          string
+        >;
 
         if (
           creds.name === userAccount.name &&

@@ -1,7 +1,7 @@
 import { initTRPC } from "@trpc/server";
 import { z } from "zod";
 import { deleteData, patchData, postData } from "~features/crud";
-import { uploadImageAccount } from "~features/new-account";
+import { createNewAccount } from "~features/new-account";
 
 const t = initTRPC.create();
 
@@ -45,10 +45,22 @@ export const appRouter = router({
       await deleteData(input.id);
     }),
 
-  uploadImageAccount: publicProcedure
-    .input(z.object({ id: z.string(), newImage: z.string() }))
+  createNewAccount: publicProcedure
+    .input(
+      z.object({
+        email: z.string(),
+        name: z.string(),
+        password: z.string(),
+        image: z.string(),
+      })
+    )
     .mutation(async ({ input }) => {
-      await uploadImageAccount(input.id, input.newImage);
+      await createNewAccount({
+        email: input.email,
+        name: input.name,
+        password: input.password,
+        image: input.image,
+      });
     }),
 });
 

@@ -2,5 +2,5 @@
 @unocss all;
 
 .border-brutalism {
-  @apply border-b-4 border-l-2 border-r-4 border-t-2 border-zinc-900 dark:border-zinc-50;
+  @apply border-b-[5px] border-l-[3px] border-r-[5px] border-t-[3px] border-zinc-900 dark:border-zinc-50;
 }

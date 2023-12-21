@@ -51,9 +51,7 @@ export default function RootLayout({ children }: ChildrenProps) {
               "items-center max-w-full text-zinc-900 dark:text-zinc-50"
             )}
           >
-            <div className="bg-zinc-50 dark:bg-zinc-900 w-full max-w-md min-h-screen p-4">
-              {children}
-            </div>
+            <div className="w-full max-w-md min-h-screen p-4">{children}</div>
           </main>
         </Wrapper>
       </body>

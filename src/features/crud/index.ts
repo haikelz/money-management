@@ -1,5 +1,6 @@
 import {
   addDoc,
+  and,
   collection,
   deleteDoc,
   doc,
@@ -17,8 +18,10 @@ export async function getData(
 ): Promise<DataFromFireStoreProps | undefined> {
   try {
     const reference = collection(db, "data");
-    let q = query(reference, where("email", "==", email));
-    q = query(reference, where("name", "==", name));
+    const q = query(
+      reference,
+      and(where("email", "==", email), where("name", "==", name))
+    );
 
     const response = await getDocs(q);
     return response;

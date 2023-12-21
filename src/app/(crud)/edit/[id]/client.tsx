@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Button, Input, Label, TextArea } from "~components/ui";
 import { tw } from "~lib/helpers";
 import { trpc } from "~lib/utils/trpc/client";
@@ -36,7 +37,14 @@ export default function Client(
       await queryClient.invalidateQueries({
         queryKey: ["patch-data"],
       }),
-    onSuccess: () => window.location.replace("/"),
+    onSuccess: () => {
+      toast("Sukses edit data!");
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 1000);
+    },
+    onError: () =>
+      toast("Terjadi masalah saat submit data perubahan! Silahkan coba lagi"),
   });
 
   // update data

@@ -14,7 +14,7 @@ declare module "next-auth" {
   }
 
   interface User extends DefaultUser {
-    id: string;
+    id?: string;
     login?: string;
     created_at: string;
     image: string;

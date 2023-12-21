@@ -4,27 +4,14 @@ import {
   DocumentData,
   QuerySnapshot,
   addDoc,
+  and,
   collection,
-  doc,
   getDocs,
   query,
-  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "~lib/utils/firebase";
 import { FieldsProps } from "~types";
-
-export async function getAllUsersAccount(
-  email: string,
-  name: string,
-  password: string
-) {
-  try {
-    // const response = await getDocs()
-  } catch (err) {
-    console.error(err);
-  }
-}
 
 export async function getUserAccount(
   name: string,
@@ -32,8 +19,10 @@ export async function getUserAccount(
 ): Promise<QuerySnapshot<DocumentData, DocumentData> | undefined> {
   try {
     const reference = collection(db, "accounts");
-    let q = query(reference, where("email", "==", name));
-    q = query(reference, where("password", "==", password));
+    const q = query(
+      reference,
+      and(where("name", "==", name), where("password", "==", password))
+    );
 
     const response = await getDocs(q);
     return response;
@@ -64,21 +53,6 @@ export async function createNewAccount(data: NewAccountProps): Promise<void> {
       password: password,
       image: image,
       created_at: created_at,
-    });
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-export async function uploadImageAccount(
-  id: string,
-  newImage: string
-): Promise<void> {
-  try {
-    const reference = doc(db, "accounts", id);
-
-    await updateDoc(reference, {
-      image: newImage,
     });
   } catch (err) {
     console.error(err);

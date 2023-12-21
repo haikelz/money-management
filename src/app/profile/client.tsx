@@ -1,12 +1,9 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
 import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { useState } from "react";
 import { tw } from "~lib/helpers";
-import { trpc } from "~lib/utils/trpc/client";
 
 export function SignOutButton() {
   const { setTheme } = useTheme();
@@ -36,40 +33,5 @@ export function SignOutButton() {
       />
       <span className="font-medium text-base">Sign Out</span>
     </button>
-  );
-}
-
-export function UploadImage({ id }: { id: string }) {
-  const queryClient = useQueryClient();
-  const [readFile, setReadFile] = useState<string>("");
-
-  const { mutate } = trpc.uploadImageAccount.useMutation({
-    mutationKey: [id],
-    onSettled: async () =>
-      await queryClient.invalidateQueries({ queryKey: [id], exact: true }),
-    onSuccess: () => window.location.reload(),
-  });
-
-  async function reader(e) {
-    e.preventDefault();
-    const reader = new FileReader();
-
-    reader.onload = async (e) => {
-      const text = e.target.result;
-
-      mutate({ id: id, newImage: text });
-      setReadFile(text);
-      console.log(text);
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
-  }
-
-  console.log(typeof readFile);
-  return (
-    <div>
-      <span>Upload Image</span>
-      <input type="file" name="image" onChange={(e) => reader(e)} />
-    </div>
   );
 }
