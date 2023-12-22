@@ -10,7 +10,7 @@ import Client from "./client";
 const baseMetadata = {
   title: "Sign In",
   description: "Sign In to Money Management",
-  url: `${SITE_URL}/sign-in`,
+  url: `${SITE_URL}/auth/sign-in`,
 };
 
 const { title, description, url } = baseMetadata;
@@ -60,8 +60,8 @@ export default async function Page() {
         </div>
         <Client />
         <div className="text-center mt-4">
-          <span>
-            Don&#39;t have an account?{" "}
+          <span className="font-medium">
+            Don&#39;t have account?{" "}
             <Link href="/auth/sign-up" className="font-bold">
               Sign Up
             </Link>

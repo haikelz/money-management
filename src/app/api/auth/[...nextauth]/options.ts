@@ -1,18 +1,12 @@
-import format from "date-fns/format";
-import id from "date-fns/locale/id";
-import { DocumentData, QuerySnapshot } from "firebase/firestore";
 import { Awaitable, NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import { env } from "~env.mjs";
 import { getUserAccount } from "~features/new-account";
+import { DataFromFireStoreProps } from "~types";
 
 const { NEXT_PUBLIC_GITHUB_ID, NEXT_PUBLIC_GITHUB_SECRET, NEXTAUTH_SECRET } =
   env;
-
-const created_at = format(new Date(), "cccc, dd MMMM yyyy, k:m:s", {
-  locale: id,
-});
 
 export const options: NextAuthOptions = {
   providers: [
@@ -50,7 +44,7 @@ export const options: NextAuthOptions = {
         const response = (await getUserAccount(
           creds.name,
           creds.password
-        )) as QuerySnapshot<DocumentData, DocumentData>;
+        )) as DataFromFireStoreProps;
 
         const userAccount = response.docs.map((item) =>
           item.data()

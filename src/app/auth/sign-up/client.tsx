@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Button, Input, Label } from "~components/ui";
 import { getUserAccount } from "~features/new-account";
-import { signInSchema } from "~lib/utils/schema";
+import { signUpSchema } from "~lib/utils/schema";
 import { trpc } from "~lib/utils/trpc/client";
 import useGlobalStore from "~store";
 import { DataFromFireStoreProps } from "~types";
@@ -33,7 +33,7 @@ export default function Client() {
       name: "",
       password: "",
     },
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(signUpSchema),
   });
 
   const { mutate } = trpc.createNewAccount.useMutation({
@@ -63,6 +63,12 @@ export default function Client() {
       (item) => item.data().password
     )[0];
 
+    /**
+     * The logic below is to check username and password values from firestore
+     * if it's same as username and password values from user's input
+     */
+
+    // if the two value are same, then open toast and return nothing
     if (
       existingName === getValues("name") &&
       existingPassword === getValues("password")
@@ -71,18 +77,25 @@ export default function Client() {
         "Email dan password yang kamu masukkan sudah dipakai! Silahkan memakai Email dan kombinasi Password yang lain"
       );
       return;
-    } else if (existingName === getValues("name")) {
+    }
+
+    // if username value are same, then open toast and return nothing
+    if (existingName === getValues("name")) {
       toast(
         "Email yang kamu masukkan sudah dipakai! Silahkan memakai Email yang lain"
       );
       return;
-    } else if (existingPassword === getValues("password")) {
+    }
+
+    // if password value are same, then open toast and return nothing
+    if (existingPassword === getValues("password")) {
       toast(
         "Password yang kamu masukkan sudah dipakai! Silahkan memakai kombinasi Password yang lain"
       );
       return;
     }
 
+    // therefore, do mutation for create account
     mutate({
       email: getValues("email"),
       name: getValues("name"),

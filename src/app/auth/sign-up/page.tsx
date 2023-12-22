@@ -1,7 +1,6 @@
 import { Metadata } from "next";
-import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import Section from "~components/section";
 import { DEFAULT_OG_URL, SITE_URL } from "~lib/utils/constants";
 import { serverSession } from "~lib/utils/server-session";
 
@@ -10,7 +9,7 @@ import Client from "./client";
 const baseMetadata = {
   title: "Sign Up",
   description: "Sign Up to Money Management",
-  url: `${SITE_URL}/sign-in`,
+  url: `${SITE_URL}/auth/sign-up`,
 };
 
 const { title, description, url } = baseMetadata;
@@ -46,13 +45,21 @@ export default async function Page() {
   if (session) return redirect("/");
 
   return (
-    <Section>
+    <section className="w-full flex justify-center items-center">
       <div className="w-full">
         <div className="w-full flex flex-col justify-center items-center">
           <h1 className="text-3xl font-extrabold">Create new account</h1>
         </div>
         <Client />
+        <div className="text-center mt-4">
+          <span className="font-medium">
+            Already have account?{" "}
+            <Link href="/auth/sign-in" className="font-bold">
+              Sign In
+            </Link>
+          </span>
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }

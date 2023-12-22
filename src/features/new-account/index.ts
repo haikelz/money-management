@@ -1,27 +1,27 @@
-import format from "date-fns/format";
-import id from "date-fns/locale/id";
 import {
-  DocumentData,
-  QuerySnapshot,
   addDoc,
   and,
   collection,
+  doc,
   getDocs,
+  or,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
+import { CREATED_AT } from "~lib/utils/constants";
 import { db } from "~lib/utils/firebase";
-import { FieldsProps } from "~types";
+import { DataFromFireStoreProps, FieldsProps } from "~types";
 
 export async function getUserAccount(
   name: string,
   password: string
-): Promise<QuerySnapshot<DocumentData, DocumentData> | undefined> {
+): Promise<DataFromFireStoreProps | undefined> {
   try {
     const reference = collection(db, "accounts");
     const q = query(
       reference,
-      and(where("name", "==", name), where("password", "==", password))
+      or(where("name", "==", name), where("password", "==", password))
     );
 
     const response = await getDocs(q);
@@ -39,10 +39,6 @@ type NewAccountProps = Omit<
   image: string;
 };
 
-const created_at = format(new Date(), "cccc, dd MMMM yyyy, k:m:s", {
-  locale: id,
-});
-
 export async function createNewAccount(data: NewAccountProps): Promise<void> {
   const { email, name, password, image } = data;
 
@@ -52,8 +48,43 @@ export async function createNewAccount(data: NewAccountProps): Promise<void> {
       name: name,
       password: password,
       image: image,
-      created_at: created_at,
+      created_at: CREATED_AT,
     });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function updateImageAccount(
+  id: string,
+  newImage: string
+): Promise<void> {
+  try {
+    const reference = doc(db, "accounts", id);
+
+    await updateDoc(reference, {
+      image: newImage,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function getUserId(
+  name: string,
+  email: string
+): Promise<string | undefined> {
+  try {
+    const reference = collection(db, "accounts");
+    const q = query(
+      reference,
+      and(where("name", "==", name), where("email", "==", email))
+    );
+
+    const userAccount = await getDocs(q);
+    const id = userAccount.docs.map((item) => item.id);
+
+    return id[0];
   } catch (err) {
     console.error(err);
   }

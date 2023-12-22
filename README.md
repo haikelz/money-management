@@ -3,6 +3,10 @@
   <p>Money Management is a Web Appliaction to manage your income and expenses.</p>
 </div>
 
+## Note
+
+This project is optimized for mobile device!
+
 ## Screenshots
 
 ## Tech Stack

@@ -30,3 +30,19 @@ export const signInSchema = z.object({
       message: "Password must not include any special character!",
     }),
 });
+
+export const signUpSchema = z.object({
+  email: z.string().email().min(1),
+  username: z
+    .string()
+    .min(1)
+    .regex(/^[A-Za-z0-9\-_\.]*$/gi, {
+      message: "Username must not include any special character!",
+    }),
+  password: z
+    .string()
+    .min(1)
+    .regex(/^[A-Za-z0-9\-_\.]*$/gi, {
+      message: "Password must not include any special character!",
+    }),
+});

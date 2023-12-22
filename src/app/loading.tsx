@@ -1,9 +1,7 @@
-import Section from "~components/section";
-
 export default function Loading() {
   return (
-    <Section className="min-h-screen">
+    <section className="min-h-screen flex justify-center items-center w-full">
       <span className="text-xl font-bold">Loading....</span>
-    </Section>
+    </section>
   );
 }
