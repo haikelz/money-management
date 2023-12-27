@@ -22,7 +22,6 @@
     "@trpc/client": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
-    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "date-fns": "^2.30.0",
     "firebase": "^10.7.1",
