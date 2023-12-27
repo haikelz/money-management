@@ -1,10 +1,4 @@
-import {
-  DocumentData,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { DocumentData } from "firebase/firestore";
 import { PencilIcon } from "lucide-react";
 import { Metadata } from "next";
 import { Session } from "next-auth";
@@ -12,14 +6,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Section from "~components/section";
-import { tw } from "~lib/helpers";
+import { getData } from "~features/crud";
+import { toRupiah, tw } from "~lib/helpers";
 import { DEFAULT_OG_URL, SITE_URL } from "~lib/utils/constants";
-import { db } from "~lib/utils/firebase";
 import { serverSession } from "~lib/utils/server-session";
-import { toRupiah } from "~lib/utils/to-rupiah";
 import { DataFromFireStoreProps } from "~types";
 
 import { DeleteButton } from "./client";
+
+export const revalidate = 0;
 
 const baseMetadata = {
   title: "Money Management",
@@ -54,23 +49,15 @@ export const metadata: Metadata = {
   metadataBase: new URL(url),
 };
 
-async function getDataFromFireStore(
-  session: Session
-): Promise<DataFromFireStoreProps | undefined> {
-  try {
-    const response = await getDocs(collection(db, "data"));
-    return response;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
 export default async function Page() {
   const session = (await serverSession()) as Session;
 
   if (!session) return redirect("/auth/sign-in");
 
-  const data = (await getDataFromFireStore(session)) as DataFromFireStoreProps;
+  const data = (await getData(
+    session.user.name,
+    session.user.email
+  )) as DataFromFireStoreProps;
 
   // total balance
   const balance = data.docs.map((item) => item.data().amount);
@@ -98,7 +85,8 @@ export default async function Page() {
         <div className="mt-4">
           <div
             className={tw(
-              "bg-blue-200 dark:bg-zinc-800 flex justify-center items-center",
+              "bg-blue-200 dark:bg-zinc-800 flex",
+              "flex-row justify-center items-center",
               "border-brutalism p-6 rounded-lg"
             )}
           >
@@ -120,7 +108,12 @@ export default async function Page() {
             </div>
           </div>
           <div className="flex mt-2.5 w-full space-x-2.5">
-            <div className="border-brutalism w-full rounded-lg p-3 h-full bg-red-200 dark:bg-zinc-800">
+            <div
+              className={tw(
+                "border-brutalism w-full rounded-lg p-3",
+                "bg-red-200 dark:bg-zinc-800"
+              )}
+            >
               <Image
                 src="/images/money-flower.svg"
                 alt="income"
@@ -134,7 +127,12 @@ export default async function Page() {
                 </p>
               </div>
             </div>
-            <div className="border-brutalism w-full rounded-lg p-3 h-full bg-yellow-200 dark:bg-zinc-800">
+            <div
+              className={tw(
+                "border-brutalism w-full rounded-lg p-3",
+                "bg-yellow-200 dark:bg-zinc-800"
+              )}
+            >
               <Image
                 src="/images/money-expense.svg"
                 alt="expense"

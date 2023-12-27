@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: ChildrenProps) {
   return (
     <html lang="en">
-      <body className={tw(archivo)}>
+      <body className={tw(archivo.className)}>
         <Wrapper>
           <main
             className={tw(
@@ -51,7 +51,7 @@ export default function RootLayout({ children }: ChildrenProps) {
               "items-center max-w-full text-zinc-900 dark:text-zinc-50"
             )}
           >
-            <div className="bg-zinc-50 dark:bg-zinc-900 w-full max-w-md min-h-screen p-4">
+            <div className="w-full max-w-md min-h-screen p-4 bg-zinc-50 dark:bg-zinc-800">
               {children}
             </div>
           </main>

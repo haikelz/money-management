@@ -1,26 +1,34 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addDoc, collection } from "firebase/firestore";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Button, Input, Label, TextArea } from "~components/ui";
 import { tw } from "~lib/helpers";
-import { db } from "~lib/utils/firebase";
 import { addDataSchema } from "~lib/utils/schema";
+import { trpc } from "~lib/utils/trpc/client";
 import useGlobalStore from "~store";
 import { TypeProps } from "~types";
 
 export default function Client(
-  { email, username }: { email: string; username: string }
+  {
+    email,
+    name,
+    created_at,
+  }: {
+    email: string;
+    name: string;
+    created_at: string;
+  }
 ) {
   const { type, setType } = useGlobalStore((state) => ({
     type: state.type as TypeProps,
     setType: state.setType,
   }));
 
-  const router = useRouter();
+  const queryClient: QueryClient = useQueryClient();
 
   const {
     register,
@@ -35,38 +43,34 @@ export default function Client(
     resolver: zodResolver(addDataSchema),
   });
 
-  async function addDataToFireStore(
-    email: string,
-    username: string,
-    type: TypeProps,
-    amount: number,
-    description: string
-  ): Promise<void> {
-    try {
-      await addDoc(collection(db, "data"), {
-        email: email,
-        username: username,
-        type: type,
-        amount: amount,
-        description: description,
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  const { mutate } = trpc.post.useMutation({
+    mutationKey: ["post-data"],
+    onSettled: async () =>
+      await queryClient.invalidateQueries({
+        queryKey: ["post-data"],
+      }),
+    onSuccess: () => {
+      toast("Sukses menambah data baru!");
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 1000);
+    },
+    onError: () =>
+      toast("Terjadi masalah saat menambah data baru! Silahkan coba lagi"),
+  });
 
-  async function onSubmit(): Promise<void> {
-    await addDataToFireStore(
-      email ?? null,
-      username ?? null,
-      type,
-      type === "Income"
-        ? Number(getValues("amount"))
-        : -Number(getValues("amount")),
-      getValues("description")
-    );
-
-    router.push("/");
+  function onSubmit() {
+    mutate({
+      email: email ?? null,
+      name: name ?? null,
+      created_at: created_at ?? null,
+      type: type,
+      amount:
+        type === "Income"
+          ? Number(getValues("amount"))
+          : -Number(getValues("amount")),
+      description: getValues("description"),
+    });
   }
 
   return (
@@ -89,7 +93,9 @@ export default function Client(
               onClick={() => setType(type === "Income" ? "Expense" : "Income")}
             >
               <Image
-                src="/images/triangle-option.svg"
+                src={`/images/${
+                  type === "Income" ? "increase.svg" : "decrease.svg"
+                }`}
                 alt="triangle"
                 width={21}
                 height={21}

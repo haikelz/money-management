@@ -1,19 +1,19 @@
-import { collection, getDocs } from "firebase/firestore";
 import { Metadata } from "next";
 import { Session } from "next-auth";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import Section from "~components/section";
-import { tw } from "~lib/helpers";
+import { getData } from "~features/crud";
+import { toRupiah, tw } from "~lib/helpers";
 import { DEFAULT_OG_URL, SITE_URL } from "~lib/utils/constants";
-import { db } from "~lib/utils/firebase";
 import { randomAvatar } from "~lib/utils/random-avatar";
 import { serverSession } from "~lib/utils/server-session";
-import { toRupiah } from "~lib/utils/to-rupiah";
 import { DataFromFireStoreProps } from "~types";
 
 import { SignOutButton } from "./client";
+
+export const revalidate = 0;
 
 const baseMetadata = {
   title: "Profile",
@@ -73,23 +73,15 @@ const optionsList: Array<{ id: number; name: string; image: string }> = [
   },
 ];
 
-async function getDataFromFireStore(): Promise<
-  DataFromFireStoreProps | undefined
-> {
-  try {
-    const response = await getDocs(collection(db, "data"));
-    return response;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
 export default async function Page() {
   const session = (await serverSession()) as Session;
 
   if (!session) return redirect("/auth/sign-in");
 
-  const data = (await getDataFromFireStore()) as DataFromFireStoreProps;
+  const data = (await getData(
+    session.user.name,
+    session.user.email
+  )) as DataFromFireStoreProps;
 
   // total balance
   const balance = data.docs.map((item) => item.data().amount);
@@ -114,7 +106,7 @@ export default async function Page() {
               />
               <div>
                 <h4 className="font-bold text-xl">{session.user.name}</h4>
-                <p className="font-medium text-sm">I&#39;m a based person!</p>
+                <p className="font-medium text-sm">{session.user.email}</p>
               </div>
             </div>
             <p className="font-semibold text-right text-sm">
@@ -153,9 +145,7 @@ export default async function Page() {
         {optionsList.map((item) => {
           if (item.name === "Switch Theme") {
             return (
-              <button
-                type="button"
-                aria-label="switch theme"
+              <div
                 className={tw(
                   "rounded-3xl flex w-full justify-between items-center",
                   "drop-shadow-md px-4 py-2 bg-zinc-50 dark:bg-zinc-800",
@@ -174,7 +164,7 @@ export default async function Page() {
                   <span className="font-medium text-base">{item.name}</span>
                 </div>
                 <SwitchTheme />
-              </button>
+              </div>
             );
           } else
             return (

@@ -1,10 +1,18 @@
 "use client";
 
 import { signOut } from "next-auth/react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import { tw } from "~lib/helpers";
 
 export function SignOutButton() {
+  const { setTheme } = useTheme();
+
+  function handleSignOut() {
+    setTheme("light");
+    signOut();
+  }
+
   return (
     <button
       type="button"
@@ -14,7 +22,7 @@ export function SignOutButton() {
         "drop-shadow-md px-4 py-2 bg-zinc-50 dark:bg-zinc-800",
         "dark:border-2 dark:border-zinc-50"
       )}
-      onClick={() => signOut()}
+      onClick={handleSignOut}
     >
       <Image
         src="/images/sign-out.svg"

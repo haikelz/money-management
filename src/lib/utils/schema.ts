@@ -17,16 +17,32 @@ export const editDataSchema = z.object({
 });
 
 export const signInSchema = z.object({
-  username: z
+  name: z
     .string()
     .min(1)
-    .regex(/[A-Za-z0-9]/gi, {
-      message: "Username must not include special character!",
+    .regex(/^[A-Za-z0-9\-_\.]*$/gi, {
+      message: "Username must not include any special character!",
     }),
   password: z
     .string()
     .min(1)
-    .regex(/[A-Za-z0-9]/gi, {
-      message: "Password must not include special character!",
+    .regex(/^[A-Za-z0-9\-_\.]*$/gi, {
+      message: "Password must not include any special character!",
+    }),
+});
+
+export const signUpSchema = z.object({
+  email: z.string().email().min(1),
+  username: z
+    .string()
+    .min(1)
+    .regex(/^[A-Za-z0-9\-_\.]*$/gi, {
+      message: "Username must not include any special character!",
+    }),
+  password: z
+    .string()
+    .min(1)
+    .regex(/^[A-Za-z0-9\-_\.]*$/gi, {
+      message: "Password must not include any special character!",
     }),
 });

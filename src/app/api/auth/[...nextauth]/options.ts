@@ -1,21 +1,12 @@
-import format from "date-fns/format";
-import id from "date-fns/locale/id";
 import { Awaitable, NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import { env } from "~env.mjs";
+import { getUserAccount } from "~features/new-account";
+import { DataFromFireStoreProps } from "~types";
 
-const {
-  NEXT_PUBLIC_GITHUB_ID,
-  NEXT_PUBLIC_GITHUB_SECRET,
-  NEXTAUTH_SECRET,
-  CREDENTIAL_PASSWORD,
-  CREDENTIAL_USERNAME,
-} = env;
-
-const createdAt = format(new Date(), "cccc, dd MMMM yyyy, k:m:s", {
-  locale: id,
-});
+const { NEXT_PUBLIC_GITHUB_ID, NEXT_PUBLIC_GITHUB_SECRET, NEXTAUTH_SECRET } =
+  env;
 
 export const options: NextAuthOptions = {
   providers: [
@@ -36,30 +27,37 @@ export const options: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials Login",
       credentials: {
-        username: {
-          label: "username",
-          type: "username",
+        name: {
+          label: "Username",
+          type: "name",
           placeholder: "Username....",
         },
         password: {
-          label: "password",
+          label: "Password",
           type: "password",
           placeholder: "Password....",
         },
       },
       async authorize(credentials) {
-        const user = {
-          id: "12345678",
-          name: CREDENTIAL_USERNAME,
-          image: "",
-          password: CREDENTIAL_PASSWORD,
-          created_at: createdAt,
-        };
+        const creds = credentials as Record<"name" | "password", string>;
 
-        const creds = credentials as Record<"username" | "password", string>;
+        const response = (await getUserAccount(
+          creds.name,
+          creds.password
+        )) as DataFromFireStoreProps;
 
-        if (creds.username === user.name && creds.password === user.password) {
-          return user;
+        const userAccount = response.docs.map((item) =>
+          item.data()
+        )[0] as Record<
+          "created_at" | "email" | "image" | "name" | "password",
+          string
+        >;
+
+        if (
+          creds.name === userAccount.name &&
+          creds.password === userAccount.password
+        ) {
+          return userAccount;
         } else {
           return null;
         }
@@ -82,6 +80,7 @@ export const options: NextAuthOptions = {
         session.user.name = token.name as string;
         session.user.login = token.login as string;
         session.user.created_at = token.created_at as string;
+        session.user.email = token.email as string;
       }
 
       return session;

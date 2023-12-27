@@ -1,19 +1,28 @@
 "use client";
 
-import { deleteDoc, doc } from "firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
 import { TrashIcon } from "lucide-react";
-import { db } from "~lib/utils/firebase";
+import toast from "react-hot-toast";
+import { trpc } from "~lib/utils/trpc/client";
 
 export function DeleteButton({ id }: { id: string }) {
-  async function deleteField(): Promise<void> {
-    try {
-      const reference = doc(db, "data", id);
-      await deleteDoc(reference);
+  const queryClient = useQueryClient();
 
-      window.location.reload();
-    } catch (err) {
-      console.error(err);
-    }
+  const { mutate } = trpc.delete.useMutation({
+    mutationKey: [id],
+    onSettled: async () => {
+      return await queryClient.invalidateQueries({
+        queryKey: [id],
+        exact: true,
+      });
+    },
+    onSuccess: () => window.location.reload(),
+    onError: () =>
+      toast("Terjadi masalah saat menghapus data! Silahkan coba lagi"),
+  });
+
+  function deleteField() {
+    mutate({ id: id });
   }
 
   return (
