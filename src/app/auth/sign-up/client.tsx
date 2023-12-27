@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Button, Input, Label } from "~components/ui";
 import { getUserAccount } from "~features/new-account";
-import { encryptPassword } from "~lib/helpers";
 import { signUpSchema } from "~lib/utils/schema";
 import { trpc } from "~lib/utils/trpc/client";
 import useGlobalStore from "~store";
@@ -64,8 +63,6 @@ export default function Client() {
       (item) => item.data().password
     )[0];
 
-    const hashPassword = await encryptPassword(getValues("password"));
-
     /**
      * The logic below is to check username and password values from firestore
      * if it's same as username and password values from user's input
@@ -102,7 +99,7 @@ export default function Client() {
     mutate({
       email: getValues("email"),
       name: getValues("name"),
-      password: hashPassword,
+      password: getValues("password"),
       image: "",
     });
   }
