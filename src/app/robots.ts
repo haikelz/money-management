@@ -6,7 +6,7 @@ export default function Robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    host: "https://money-management-app.vercel.app/",
-    sitemap: "https://money-management-app.vercel.app/sitemap.xml",
+    host: "https://money-management-123.vercel.app/",
+    sitemap: "https://money-management-123.vercel.app/sitemap.xml",
   };
 }

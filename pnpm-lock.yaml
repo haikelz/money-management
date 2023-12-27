@@ -82,6 +82,9 @@ devDependencies:
   '@trivago/prettier-plugin-sort-imports':
     specifier: ^4.3.0
     version: 4.3.0(prettier@3.1.1)
+  '@types/bcrypt':
+    specifier: ^5.0.2
+    version: 5.0.2
   '@types/node':
     specifier: ^20.10.4
     version: 20.10.4
@@ -3021,6 +3024,12 @@ packages:
   /@trpc/server@11.0.0-alpha-next-2023-12-19-17-06-13.125:
     resolution: {integrity: sha512-4bcvliAv4JhbEGNHnmTy3iA2chGppBtT7lqTFygf6o41haMvf0UX0CJ5MumshRkb3za218+xD9dKb0xlvhs+mg==}
     dev: false
+
+  /@types/bcrypt@5.0.2:
+    resolution: {integrity: sha512-6atioO8Y75fNcbmj0G7UjI9lXN2pQ/IGJ2FWT4a/btd0Lk9lQalHLKhkgKVZ3r+spnmWUKfbMi1GEe9wyHQfNQ==}
+    dependencies:
+      '@types/node': 20.10.4
+    dev: true
 
   /@types/eslint-scope@3.7.7:
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
