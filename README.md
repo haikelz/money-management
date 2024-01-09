@@ -39,7 +39,7 @@ This project is optimized for mobile device!
 
 ## Videos
 
-<div style="width:100%;height:0px;position:relative;padding-bottom:56.250%;"><iframe src="https://streamable.com/e/2vbxfi" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe></div>
+[![Video](https://i.ytimg.com/vi/D_Ym01jfCa0/hqdefault.jpg?sqp=-oaymwE2CNACELwBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_gmAAtAFigIMCAAQARhOIFMoZTAP&rs=AOn4CLBUx5_YV0i5BRvHFs3gJP0crzRwOw)](https://youtu.be/D_Ym01jfCa0?feature=shared)
 
 ## Getting Started
 
