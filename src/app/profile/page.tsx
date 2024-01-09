@@ -139,7 +139,7 @@ export default async function Page() {
       <div
         className={tw(
           "bg-red-400 dark:bg-zinc-800 w-full h-[430px] rounded-lg",
-          "px-6 space-y-4 py-8 border-2 border-zinc-900"
+          "px-6 space-y-4 py-8 border-2 border-zinc-900 dark:border-zinc-200"
         )}
       >
         {optionsList.map((item) => {
