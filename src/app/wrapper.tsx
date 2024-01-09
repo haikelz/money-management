@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, LazyMotion, domAnimation } from "framer-motion";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "react-hot-toast";
@@ -11,7 +12,9 @@ export default function Wrapper({ children }: ChildrenProps) {
     <SessionProvider>
       <Provider>
         <ThemeProvider attribute="class">
-          {children}
+          <LazyMotion features={domAnimation}>
+            <AnimatePresence mode="wait">{children}</AnimatePresence>
+          </LazyMotion>
           <Toaster position="top-center" />
         </ThemeProvider>
       </Provider>

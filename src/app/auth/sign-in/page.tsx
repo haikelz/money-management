@@ -50,7 +50,7 @@ export default async function Page() {
       <div className="w-full">
         <div className="w-full flex flex-col justify-center items-center">
           <Image
-            src="/images/sign-in.svg"
+            src="/images/logo.png"
             width={300}
             height={300}
             alt="money management login"

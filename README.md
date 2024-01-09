@@ -7,17 +7,39 @@
 
 This project is optimized for mobile device!
 
-## Screenshots
+# Features
+
+- Add new expenses/income
+- Delete history expenses/income
+- Edit history expenses/income
+- User profile
+- Dark mode switcher
+- Sign in and Sign up
 
 ## Tech Stack
 
 - Next JS
 - Typescript
 - Uno CSS
-- Zustand
-- React Query
 - Firebase
+- Zustand
+- tRPC
+- React Query
 - React Hook Form
+
+## Screenshots
+
+![ss 1](/public/docs/ss-1.png)
+
+![ss 2](/public/docs/ss-2.png)
+
+![ss 3](/public/docs/ss-3.png)
+
+![ss 4](/public/docs/ss-4.png)
+
+## Videos
+
+[![Video](https://i.ytimg.com/vi/D_Ym01jfCa0/hqdefault.jpg?sqp=-oaymwE2CNACELwBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_gmAAtAFigIMCAAQARhOIFMoZTAP&rs=AOn4CLBUx5_YV0i5BRvHFs3gJP0crzRwOw)](https://youtu.be/D_Ym01jfCa0?feature=shared)
 
 ## Getting Started
 
