@@ -1,9 +1,9 @@
+import Section from "~components/section";
+
 export default function NotFound() {
   return (
-    <div>
-      <div>
-        <p>404 Not Found!</p>
-      </div>
-    </div>
+    <Section className="min-h-screen">
+      <span className="text-xl font-extrabold">404 Not Found!</span>
+    </Section>
   );
 }
