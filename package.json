@@ -3,7 +3,7 @@
   "license": "MIT",
   "version": "1.0.0",
   "private": true,
-  "description": "Money Management is a Web Appliaction to manage your income and expenses",
+  "description": "Money Management is a Web Application to manage your income and expenses",
   "homepage": "https://money-management-123.vercel.app/",
   "repository": {
     "type": "git",

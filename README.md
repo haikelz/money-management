@@ -1,13 +1,25 @@
 <div align="center">
   <h1>Money Management</h1>
-  <p>Money Management is a Web Appliaction to manage your income and expenses.</p>
+  <p>Money Management is a Web Application to manage your income and expenses.</p>
 </div>
 
 ## Note
 
 This project is optimized for mobile device!
 
-# Features
+## About
+
+Initially, this project is created as an assignment for mobile programming subject in my college. Me and two of my friends are assigned to make an Android app, along with the UI Design. But then my lecturer said that if we create the Website version too, it'll be a plus for us. So, here I am, as a UI Designer and Frontend Developer, developing UI Design and Website version of this project. Android app versions are developed by my friend.
+
+## Development Process
+
+![Development Process](public/docs/development.png)
+
+## Website Structure
+
+![Website Structure](public/docs/website-structure.png)
+
+## Features
 
 - Add new expenses/income
 - Delete history expenses/income
