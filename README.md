@@ -26,7 +26,6 @@ This project is optimized for mobile device!
 - tRPC
 - React Query
 - React Hook Form
--
 
 ## Screenshots
 
