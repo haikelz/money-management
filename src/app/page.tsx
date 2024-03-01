@@ -87,7 +87,7 @@ export default async function Page() {
             className={tw(
               "bg-blue-200 dark:bg-zinc-800 flex",
               "flex-row justify-center items-center",
-              "border-brutalism p-6 rounded-lg"
+              "border-brutalism p-6 w-full rounded-lg"
             )}
           >
             <Image
@@ -114,12 +114,14 @@ export default async function Page() {
                 "bg-red-200 dark:bg-zinc-800"
               )}
             >
-              <Image
-                src="/images/money-flower.svg"
-                alt="income"
-                width={79.53}
-                height={76}
-              />
+              <div className="flex justify-center items-center w-full">
+                <Image
+                  src="/images/money-flower.svg"
+                  alt="income"
+                  width={79.53}
+                  height={76}
+                />
+              </div>
               <div className="mt-2">
                 <p className="font-medium text-sm">Income:</p>
                 <p className="font-extrabold text-[17px]">
@@ -133,12 +135,14 @@ export default async function Page() {
                 "bg-yellow-200 dark:bg-zinc-800"
               )}
             >
-              <Image
-                src="/images/money-expense.svg"
-                alt="expense"
-                width={79.53}
-                height={76}
-              />
+              <div className="flex justify-center items-center w-full">
+                <Image
+                  src="/images/money-expense.svg"
+                  alt="expense"
+                  width={79.53}
+                  height={76}
+                />
+              </div>
               <div className="mt-2">
                 <p className="font-medium text-sm">Expenses:</p>
                 <p className="font-extrabold text-[17px]">
