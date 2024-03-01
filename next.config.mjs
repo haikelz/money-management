@@ -1,4 +1,5 @@
 import withPWAInit from "@ducanh2912/next-pwa";
+import UnoCSS from "@unocss/webpack";
 
 import "./src/env.mjs";
 
@@ -20,6 +21,13 @@ const nextConfig = withPWA({
       },
     ],
     dangerouslyAllowSVG: true,
+  },
+  webpack: (config) => {
+    config.plugins.push(UnoCSS());
+    return config;
+  },
+  experimental: {
+    webpackBuildWorker: true,
   },
 });
 

@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Button, Input, Label } from "~components/ui";
@@ -24,7 +25,6 @@ export default function Client() {
 
   const {
     register,
-    handleSubmit,
     getValues,
     formState: { errors },
   } = useForm({
@@ -52,7 +52,9 @@ export default function Client() {
     onError: () => toast("Terjadi masalah saat pembuatan akun! Coba lagi"),
   });
 
-  async function onSubmit(): Promise<void> {
+  async function onSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
+    e.preventDefault();
+
     const userAccount = (await getUserAccount(
       getValues("name"),
       getValues("password")
@@ -107,7 +109,7 @@ export default function Client() {
   return (
     <div className="w-full flex justify-center items-center flex-col">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
         className="w-full flex flex-col justify-center items-center"
       >
         <div className="my-8 space-y-3 w-full">

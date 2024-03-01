@@ -16,7 +16,10 @@ export function DeleteButton({ id }: { id: string }) {
         exact: true,
       });
     },
-    onSuccess: () => window.location.reload(),
+    onSuccess: () => {
+      toast("Berhasil mendelete histori!");
+      window.location.reload();
+    },
     onError: () =>
       toast("Terjadi masalah saat menghapus data! Silahkan coba lagi"),
   });

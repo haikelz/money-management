@@ -17,5 +17,4 @@ COPY . ./
 RUN turbo run build
 
 # Run project
-COPY .next ./.next
 CMD ["turbo", "run", "dev"]
